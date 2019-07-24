@@ -27,16 +27,7 @@ pipeline {
          sh 'npm build'
       }
     }    
-    stage( 'npm-start' ) {
-       steps { 
-          sh 'npm start'
-      }
-    }
-   stage( 'npm-stop' ) {
-       steps { 
-          sh 'npm stop'
-      }
-    }
+    
     stage('Build') {
       steps {
           sh "docker build -t narendra311777/node-js-sample:${BUILD_NUMBER} ."
