@@ -1,0 +1,52 @@
+pipeline {
+  agent any
+    
+  tools {nodejs "node"}
+    
+  stages {
+        
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/couchbaselabs/restful-angularjs-nodejs'
+      }
+    }
+        
+    stage('Install dependencies') {
+      steps {
+        sh 'npm install'
+      }
+    }
+    stage( 'npm-start' ) {
+       steps { 
+          sh 'npm start'
+      }
+    }
+    stage('Test') {
+      steps {
+         sh 'npm test'
+      }
+    }  
+    stage('npm-build') {
+      steps {
+         sh 'npm build'
+      }
+    }    
+   stage( 'npm-stop' ) {
+       steps { 
+          sh 'npm stop'
+      }
+    }
+    stage('Build') {
+      steps {
+          sh "docker build -t narendra311777/restful-angularjs-nodejs:${BUILD_NUMBER} ."
+      }
+    }
+    stage('publish_image') {
+     steps {
+         withDockerRegistry([credentialsId: 'docker', url: 'https://registry.hub.docker.com']) {
+          sh "sudo docker push docker.io/narendra311777/restful-angularjs-nodejs:${BUILD_NUMBER}"
+        }
+      }
+    } 
+  } 
+}
