@@ -2,7 +2,7 @@ FROM node:8.11.1
 
 # install dependencies
 RUN mkdir -p /opt/app
-WORKDIR /tmp/app/
+WORKDIR /opt/app/
 COPY package.json package-lock.json* ./
 RUN npm cache clean --force && npm install
 
