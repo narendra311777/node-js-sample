@@ -1,0 +1,42 @@
+pipeline {
+  agent any
+    tools {nodejs "node"}
+  stages {
+        
+    stage('Cloning Git') {
+      steps {
+        git 'https://github.com/narendra311777/node-js-sample.git'
+      }
+    }
+        
+    stage('Install dependencies') {
+      steps {
+        sh 'npm install'
+      }
+    }
+    
+    stage('Test') {
+      steps {
+         sh 'npm test'
+      }
+    }  
+    stage('npm-build') {
+      steps {
+         sh 'npm build'
+      }
+    }    
+    
+    stage('Build') {
+      steps {
+          sh "docker build -t narendra311777/node-js-sample:${BUILD_NUMBER} ."
+      }
+    }
+    stage('publish_image') {
+     steps {
+         withDockerRegistry([credentialsId: 'docker', url: 'https://registry.hub.docker.com']) {
+          sh "sudo docker push docker.io/narendra311777/node-js-sample:${BUILD_NUMBER}"
+        }
+      }
+    } 
+  } 
+}
