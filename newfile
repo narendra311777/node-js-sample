@@ -34,7 +34,7 @@ pipeline {
     
     stage('publish_image') {
      steps {
-        withDockerRegistry([credentialsId: 'docker', url: 'https://registry.hub.docker.com']) {
+        docker.withRegistry([credentialsId: 'docker', url: 'https://registry.hub.docker.com']) {
           sh "sudo docker push docker.io/narendra311777/node-js-sample:${BUILD_NUMBER}"
         }
       }
